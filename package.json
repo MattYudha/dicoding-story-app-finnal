@@ -1,0 +1,32 @@
+{
+  "name": "dicoding-story",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite preview",
+    "build": "vite build",
+    "preview": "vite preview --host",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "pwa",
+    "story",
+    "dicoding",
+    "javascript",
+    "vite"
+  ],
+  "author": "",
+  "license": "ISC",
+  "description": "Progressive Web App for sharing stories with photos and locations",
+  "devDependencies": {
+    "vite": "^5.4.19",
+    "vite-plugin-pwa": "^0.20.5"
+  },
+  "dependencies": {
+    "idb": "^8.0.0",
+    "leaflet": "^1.9.4",
+    "workbox-window": "^7.0.0"
+  }
+}

@@ -1,0 +1,74 @@
+<!-- src/index.html -->
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <title>Dicoding Story App</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <meta name="description" content="Aplikasi berbagi cerita Dicoding" />
+  </head>
+  <body>
+    <a href="#main-content" class="skip-to-content" tabindex="1"
+      >Lewati ke konten</a
+    >
+    <header role="banner">
+      <h1>Dicoding Story</h1>
+      <nav role="navigation">
+        <ul>
+          <li><a href="#/home" aria-label="Ke halaman beranda">Beranda</a></li>
+          <li>
+            <a href="#/add-story" aria-label="Tambah cerita baru"
+              >Tambah Cerita</a
+            >
+          </li>
+          <li>
+            <a href="#/login" id="login-link" aria-label="Masuk ke akun"
+              >Login</a
+            >
+          </li>
+          <li>
+            <a href="#/register" aria-label="Daftar akun baru">Register</a>
+          </li>
+          <li>
+            <a
+              href="#"
+              id="logout-link"
+              style="display: none"
+              aria-label="Keluar dari akun"
+              >Logout</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main id="main-content" role="main">
+      <div id="content"></div>
+    </main>
+    <footer role="contentinfo">
+      <p>© 2025 Dicoding Story App</p>
+    </footer>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("/sw.js")
+          .then(() => {
+            console.log("Service Worker registered");
+          })
+          .catch((error) => {
+            console.error("Service Worker registration failed:", error);
+          });
+      }
+    </script>
+    <script type="module" src="/js/main.js"></script>
+  </body>
+</html>

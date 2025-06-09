@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <title>Dicoding Story App</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" as="style" />
+    <link rel="preload" href="/assets/css/styles.css" as="style" />
+    <link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style" />
+    
+    <!-- Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <link rel="stylesheet" href="/assets/css/enhancements.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Aplikasi berbagi cerita dengan foto dan lokasi - Share your stories with photos and locations" />
+    <meta name="keywords" content="story, sharing, photos, location, dicoding, pwa, progressive web app" />
+    <meta name="author" content="Dicoding Student" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#4361ee" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="StoryApp" />
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Dicoding Story App" />
+    <meta property="og:description" content="Share your stories with photos and locations" />
+    <meta property="og:image" content="/icons/icon-512x512.png" />
+    <meta property="og:url" content="https://dicoding-story-appp.netlify.app/" />
+    <meta property="og:type" content="website" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Dicoding Story App" />
+    <meta name="twitter:description" content="Share your stories with photos and locations" />
+    <meta name="twitter:image" content="/icons/icon-512x512.png" />
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    
+    <!-- Performance Hints -->
+    <link rel="dns-prefetch" href="https://story-api.dicoding.dev" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://unpkg.com" />
+  </head>
+  <body>
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-to-content" tabindex="1">Lewati ke konten utama</a>
+    
+    <!-- Main header -->
+    <header role="banner">
+      <h1>
+        <a href="#/" aria-label="StoryApp - Kembali ke Beranda">StoryApp</a>
+      </h1>
+      <nav role="navigation" aria-label="Menu utama">
+        <ul>
+          <li><a href="#/" aria-current="page">Beranda</a></li>
+          <li><a href="#/stories">Stories</a></li>
+          <li><a href="#/add-story">Add Story</a></li>
+          <li><a href="#/favorites" id="favorites-link" style="display: none;">Favorites</a></li>
+          <li><a href="#/about">About</a></li>
+          <li><a href="#/subscribe" id="subscribe-link" style="display: none;">Subscribe</a></li>
+          <li><span id="user-welcome" class="user-welcome" style="display: none;"></span></li>
+          <li><a href="#/login" id="login-link">Login</a></li>
+          <li><a href="#/register">Register</a></li>
+          <li>
+            <a href="#" id="logout-link" style="display: none" aria-label="Keluar dari akun">Logout</a>
+          </li>
+          <li>
+            <button id="install-app-btn" class="install-app-btn" style="display: none;" aria-label="Install app">
+              <span class="btn-icon">📱</span>
+              Install App
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    
+    <!-- Main content area -->
+    <main id="main-content" role="main" tabindex="-1">
+      <div id="content"></div>
+    </main>
+    
+    <!-- Footer -->
+    <footer role="contentinfo">
+      <p>&copy; 2025 Dicoding Story App</p>
+    </footer>
+    
+    <!-- Loading indicator for initial load -->
+    <div id="initial-loading" class="loading-state" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
+      <div class="spinner"></div>
+      <p>Loading StoryApp...</p>
+    </div>
+    
+    <!-- Main application script -->
+    <script type="module" src="/js/main.js"></script>
+    
+    <!-- Hide initial loading indicator once app loads -->
+    <script>
+      window.addEventListener('load', () => {
+        const loadingIndicator = document.getElementById('initial-loading');
+        if (loadingIndicator) {
+          loadingIndicator.style.display = 'none';
+        }
+      });
+    </script>
+  </body>
+</html>

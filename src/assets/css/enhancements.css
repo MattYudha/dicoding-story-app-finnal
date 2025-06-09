@@ -1,0 +1,315 @@
+/* src/assets/css/enhancements.css - Additional CSS enhancements */
+
+/* High contrast mode support */
+.high-contrast {
+  --primary: #0066cc;
+  --secondary: #004499;
+  --accent: #0088ff;
+  --success: #008800;
+  --warning: #cc6600;
+  --error: #cc0000;
+  --dark: #000000;
+  --light: #ffffff;
+  --gray-100: #ffffff;
+  --gray-200: #f0f0f0;
+  --gray-300: #cccccc;
+  --gray-400: #999999;
+  --gray-500: #666666;
+  --gray-600: #333333;
+  --gray-700: #000000;
+  --gray-800: #000000;
+}
+
+/* Reduced motion support */
+.reduced-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Enhanced focus indicators */
+.enhanced-focus *:focus {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px rgba(67, 97, 238, 0.3);
+}
+
+/* Loading states */
+.loading-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Improved notification styles */
+.notification-btn {
+  background: linear-gradient(120deg, var(--accent), var(--primary));
+  color: var(--light);
+  border: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.notification-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.notification-btn.subscribed {
+  background: linear-gradient(120deg, var(--success), var(--accent));
+}
+
+.notification-btn.blocked {
+  background: linear-gradient(120deg, var(--error), var(--warning));
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Update banner */
+.update-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(120deg, var(--primary), var(--secondary));
+  color: var(--light);
+  padding: 1rem;
+  z-index: 1000;
+  box-shadow: var(--shadow-lg);
+  animation: slideDown 0.3s ease-out;
+}
+
+.update-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced toast notifications */
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--dark);
+  color: var(--light);
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  transform: translateX(100%);
+  transition: transform var(--transition);
+  max-width: 300px;
+  border-left: 4px solid var(--primary);
+}
+
+.toast-notification.success {
+  border-left-color: var(--success);
+  background: var(--success);
+}
+
+.toast-notification.error {
+  border-left-color: var(--error);
+  background: var(--error);
+}
+
+.toast-notification.warning {
+  border-left-color: var(--warning);
+  background: var(--warning);
+  color: var(--dark);
+}
+
+.toast-notification.show {
+  transform: translateX(0);
+}
+
+/* Improved spinner animations */
+.spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+/* Enhanced story grid with better spacing */
+.stories-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+/* Improved accessibility for screen readers */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Focus trap for modals */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal[hidden] {
+  display: none;
+}
+
+.modal-content {
+  background: var(--light);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: var(--shadow-lg);
+}
+
+/* Enhanced button states */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn:disabled:hover {
+  transform: none !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+/* Improved form validation */
+.form-group.error input,
+.form-group.error textarea {
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px rgba(239, 71, 111, 0.2);
+}
+
+.form-group.error .error-message {
+  color: var(--error);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Performance optimization classes */
+.lazy {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.lazy.loaded {
+  opacity: 1;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .story-item {
+    break-inside: avoid;
+    margin-bottom: 2rem;
+  }
+  
+  .story-map {
+    display: none;
+  }
+}
+
+/* Dark mode improvements */
+@media (prefers-color-scheme: dark) {
+  .update-banner {
+    background: linear-gradient(120deg, var(--dark-blue), var(--dark));
+  }
+  
+  .modal {
+    background: rgba(0, 0, 0, 0.9);
+  }
+  
+  .modal-content {
+    background: var(--gray-200);
+    color: var(--gray-800);
+  }
+}
+
+/* Enhanced responsive design */
+@media (max-width: 768px) {
+  .update-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .toast-notification {
+    right: 10px;
+    left: 10px;
+    max-width: none;
+    transform: translateY(-100%);
+  }
+  
+  .toast-notification.show {
+    transform: translateY(0);
+  }
+  
+  .stories-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1rem 0;
+  }
+}
+
+/* Animation performance optimizations */
+@media (prefers-reduced-motion: no-preference) {
+  .story-item {
+    animation: cardAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+  
+  .story-item:nth-child(odd) {
+    animation-delay: 0.1s;
+  }
+  
+  .story-item:nth-child(even) {
+    animation-delay: 0.2s;
+  }
+}
