@@ -27,7 +27,6 @@ export default class AddStoryView {
     }
 
     const content = createElement("div", { class: "add-story-container" });
-    // ... (innerHTML Anda tetap sama) ...
     content.innerHTML = `
       <div class="form-header">
         <h2>Create New Story</h2>
@@ -206,7 +205,6 @@ export default class AddStoryView {
   }
 
   async getCurrentLocation() {
-    // ... (Fungsi ini tidak berubah) ...
     const useLocationBtn = document.getElementById("use-my-location");
     const originalText = useLocationBtn.innerHTML;
 
@@ -236,7 +234,6 @@ export default class AddStoryView {
   }
 
   updateLocationDisplay(lat, lon) {
-    // ... (Fungsi ini tidak berubah) ...
     const locationInfo = document.getElementById("location-info");
     const latInput = document.getElementById("latitude");
     const lonInput = document.getElementById("longitude");
@@ -254,20 +251,16 @@ export default class AddStoryView {
   }
 
   async submitStory() {
-    // ... (Fungsi ini tidak berubah) ...
     const description = document.getElementById("description").value.trim();
-    const token = getToken();
 
     if (!description) {
       this.showMessage("Please enter a story description!");
       return;
     }
-
     if (description.length > 500) {
       this.showMessage("Story description must be 500 characters or less!");
       return;
     }
-
     if (!this.photo) {
       this.showMessage("Please capture a photo first!");
       return;
@@ -275,15 +268,28 @@ export default class AddStoryView {
 
     const { lat, lon } = this.presenter.getCoordinates();
 
-    const submitBtn = document.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<span class="spinner-small"></span> Sharing...';
-    submitBtn.disabled = true;
+    // Memanggil presenter untuk menangani logika submit yang kompleks
+    await this.presenter.addStory(description, this.photo, lat, lon);
+  }
 
-    try {
-      await this.presenter.addStory(description, this.photo, lat, lon, token);
-    } catch (error) {
-      submitBtn.innerHTML = originalText;
+  // =======================================================
+  // FUNGSI BARU DITAMBAHKAN DI SINI
+  // =======================================================
+  /**
+   * Mengelola tampilan tombol submit (loading state)
+   * @param {boolean} isLoading - True jika sedang loading, false jika tidak.
+   */
+  showLoading(isLoading) {
+    const submitBtn = document.querySelector('button[type="submit"]');
+    if (!submitBtn) return;
+
+    if (isLoading) {
+      submitBtn.innerHTML = '<span class="spinner-small"></span> Sharing...';
+      submitBtn.disabled = true;
+    } else {
+      // Mengembalikan ke state awal
+      const defaultText = '<span class="btn-icon">📝</span> Share Story';
+      submitBtn.innerHTML = defaultText;
       submitBtn.disabled = false;
     }
   }
@@ -296,7 +302,9 @@ export default class AddStoryView {
     stopCamera(this.stream);
   }
 
-  showMessage(message) {
+  showMessage(message, type = "info") {
+    // Implementasi toast notification yang lebih baik bisa diletakkan di sini
+    console.log(`[${type.toUpperCase()}]: ${message}`);
     alert(message);
   }
 }
