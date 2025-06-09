@@ -1,4 +1,4 @@
-// vite.config.js - Fixed configuration for PWA and Service Worker
+// vite.config.js
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
@@ -6,21 +6,14 @@ export default defineConfig({
   root: "src",
   server: {
     port: 3000,
-    host: true, // Memungkinkan akses dari network
-
-    // =======================================================
-    // PENYESUAIAN UTAMA: Menambahkan konfigurasi proxy
-    // =======================================================
+    host: true,
     proxy: {
-      // Semua permintaan yang dimulai dengan '/api' akan diteruskan
       "/api": {
-        target: "https://story-api.dicoding.dev", // Server tujuan
-        changeOrigin: true, // Diperlukan untuk virtual hosting
-        // Menulis ulang path: '/api/v1/stories' menjadi '/v1/stories'
+        target: "https://story-api.dicoding.dev",
+        changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
-    // =======================================================
   },
   build: {
     outDir: "../dist",
@@ -37,61 +30,17 @@ export default defineConfig({
   publicDir: "../public",
   plugins: [
     VitePWA({
+      // =======================================================
+      // PERBAIKAN UTAMA: Menggunakan strategi 'injectManifest'
+      // untuk mengatasi error build di Netlify.
+      // =======================================================
+      strategies: "injectManifest",
+      srcDir: ".", // Lokasi file sw.js Anda (relatif terhadap 'root')
+      filename: "sw.js", // Nama file service worker custom Anda
+      // =======================================================
+
+      // Konfigurasi Anda yang lain dipertahankan
       registerType: "prompt",
-      workbox: {
-        globPatterns: [
-          "**/*.{js,css,html,ico,png,svg,jpg,jpeg,gif,webp,woff,woff2}",
-        ],
-        // runtimeCaching untuk API tidak lagi diperlukan saat development karena sudah ditangani proxy,
-        // namun tetap berguna untuk mode offline saat production.
-        runtimeCaching: [
-          {
-            urlPattern: ({ url }) => url.pathname.startsWith("/api"),
-            handler: "NetworkFirst",
-            options: {
-              cacheName: "api-cache",
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 * 3, // 3 hari
-              },
-              networkTimeoutSeconds: 5,
-            },
-          },
-          {
-            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "images-cache",
-              expiration: {
-                maxEntries: 200,
-                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 hari
-              },
-            },
-          },
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "google-fonts-cache",
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 tahun
-              },
-            },
-          },
-          {
-            urlPattern: /^https:\/\/unpkg\.com\/.*/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "cdn-cache",
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 hari
-              },
-            },
-          },
-        ],
-      },
       manifest: {
         name: "Dicoding Story App",
         short_name: "StoryApp",
@@ -153,7 +102,6 @@ export default defineConfig({
             icons: [{ src: "/icons/icon-96x96.png", sizes: "96x96" }],
           },
         ],
-        // ... sisa manifest Anda
       },
       devOptions: {
         enabled: true,

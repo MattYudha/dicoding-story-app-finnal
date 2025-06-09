@@ -1,7 +1,7 @@
 // src/js/constants.js
 
 // =======================================================
-// PERBAIKAN UTAMA: Arahkan URL ke path proxy
+// KONFIGURASI SUDAH BENAR: Arahkan URL ke path proxy
 // =======================================================
 // URL ini akan di-intercept oleh Vite Dev Server dan diteruskan ke API Dicoding
 export const BASE_URL = "/api/v1";
