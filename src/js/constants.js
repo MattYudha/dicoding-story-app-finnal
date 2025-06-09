@@ -1,11 +1,14 @@
 // src/js/constants.js
 
-// =======================================================
-// KONFIGURASI SUDAH BENAR: Arahkan URL ke path proxy
-// =======================================================
-// URL ini akan di-intercept oleh Vite Dev Server dan diteruskan ke API Dicoding
-export const BASE_URL = "/api/v1";
+// Secara otomatis memilih URL berdasarkan lingkungan (development vs production)
+const API_URL_PROD = "https://story-api.dicoding.dev/v1";
+const API_URL_DEV = "/api/v1"; // URL untuk proxy saat development
 
-// VAPID key Anda untuk push notifications
-export const VAPID_PUBLIC_KEY =
-  "BCCs2eonMI-6H2ctvFaWg-UYdDv387Vno_bzUzALpB442r2lCnsHmtrx8biyPi_E-1fSGABK_Qs_GlvPoJJqxbk";
+// import.meta.env.DEV adalah variabel khusus dari Vite.
+// Nilainya 'true' saat menjalankan 'npm run dev', dan 'false' saat 'npm run build'.
+export const BASE_URL = import.meta.env.DEV ? API_URL_DEV : API_URL_PROD;
+
+// Mengambil VAPID key dari environment variable
+export const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+
+console.log(`Current API Base URL: ${BASE_URL}`); // Untuk membantu debugging
