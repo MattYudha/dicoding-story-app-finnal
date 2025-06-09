@@ -27,6 +27,7 @@
   "dependencies": {
     "idb": "^8.0.0",
     "leaflet": "^1.9.4",
+    "node": "^22.16.0",
     "workbox-window": "^7.0.0"
   }
 }

@@ -1,4 +1,5 @@
 // src/js/views/add-story.js
+
 import AddStoryPresenter from "../presenters/add-story-presenter.js";
 import { createElement } from "../utils/dom.js";
 import {
@@ -26,6 +27,7 @@ export default class AddStoryView {
     }
 
     const content = createElement("div", { class: "add-story-container" });
+    // ... (innerHTML Anda tetap sama) ...
     content.innerHTML = `
       <div class="form-header">
         <h2>Create New Story</h2>
@@ -107,16 +109,17 @@ export default class AddStoryView {
         </div>
       </form>
     `;
-    
-    document.getElementById("content").innerHTML = "";
-    document.getElementById("content").appendChild(content);
+
+    const contentElement = document.getElementById("content") || document.body;
+    contentElement.innerHTML = "";
+    contentElement.appendChild(content);
 
     await this.initializeForm();
   }
 
   async initializeForm() {
     const video = document.getElementById("camera");
-    
+
     try {
       this.stream = await startCamera(video);
     } catch (error) {
@@ -139,14 +142,12 @@ export default class AddStoryView {
     const cancelBtn = document.getElementById("cancel-btn");
     const form = document.getElementById("add-story-form");
 
-    // Character counter
     descriptionTextarea.addEventListener("input", (e) => {
       const length = e.target.value.length;
       charCount.textContent = length;
-      charCount.style.color = length > 500 ? '#ef476f' : '#6c757d';
+      charCount.style.color = length > 500 ? "#ef476f" : "#6c757d";
     });
 
-    // Camera controls
     captureBtn.addEventListener("click", () => {
       this.capturePhoto();
     });
@@ -155,20 +156,19 @@ export default class AddStoryView {
       this.retakePhoto();
     });
 
-    // Location controls
     useLocationBtn.addEventListener("click", () => {
       this.getCurrentLocation();
     });
 
-    // Cancel button
     cancelBtn.addEventListener("click", () => {
-      if (confirm("Are you sure you want to cancel? Your story will be lost.")) {
-        this.stopCamera();
+      if (
+        confirm("Are you sure you want to cancel? Your story will be lost.")
+      ) {
+        this.destroy(); // Panggil destroy saat cancel
         window.location.hash = "#/stories";
       }
     });
 
-    // Form submission
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       await this.submitStory();
@@ -184,7 +184,7 @@ export default class AddStoryView {
 
     const dataURL = captureImage(video, canvas);
     this.photo = dataURLtoFile(dataURL, "story.jpg");
-    
+
     preview.src = dataURL;
     preview.style.display = "block";
     video.style.display = "none";
@@ -206,10 +206,12 @@ export default class AddStoryView {
   }
 
   async getCurrentLocation() {
+    // ... (Fungsi ini tidak berubah) ...
     const useLocationBtn = document.getElementById("use-my-location");
     const originalText = useLocationBtn.innerHTML;
-    
-    useLocationBtn.innerHTML = '<span class="spinner-small"></span> Getting location...';
+
+    useLocationBtn.innerHTML =
+      '<span class="spinner-small"></span> Getting location...';
     useLocationBtn.disabled = true;
 
     try {
@@ -217,17 +219,14 @@ export default class AddStoryView {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
           enableHighAccuracy: true,
           timeout: 10000,
-          maximumAge: 60000
+          maximumAge: 60000,
         });
       });
 
       const { latitude, longitude } = position.coords;
       this.updateLocationDisplay(latitude, longitude);
       this.presenter.setCoordinates(latitude, longitude);
-      
-      // Update map to show user's location
       this.presenter.updateMapLocation(latitude, longitude);
-      
     } catch (error) {
       this.showMessage(`Failed to get location: ${error.message}`);
     } finally {
@@ -237,21 +236,25 @@ export default class AddStoryView {
   }
 
   updateLocationDisplay(lat, lon) {
+    // ... (Fungsi ini tidak berubah) ...
     const locationInfo = document.getElementById("location-info");
     const latInput = document.getElementById("latitude");
     const lonInput = document.getElementById("longitude");
-    
+
     locationInfo.innerHTML = `
       <span class="location-icon">📍</span>
-      <span class="location-text">Location: ${lat.toFixed(6)}, ${lon.toFixed(6)}</span>
+      <span class="location-text">Location: ${lat.toFixed(6)}, ${lon.toFixed(
+      6
+    )}</span>
     `;
     locationInfo.classList.add("location-selected");
-    
+
     latInput.value = lat.toFixed(6);
     lonInput.value = lon.toFixed(6);
   }
 
   async submitStory() {
+    // ... (Fungsi ini tidak berubah) ...
     const description = document.getElementById("description").value.trim();
     const token = getToken();
 
@@ -271,8 +274,7 @@ export default class AddStoryView {
     }
 
     const { lat, lon } = this.presenter.getCoordinates();
-    
-    // Show loading state
+
     const submitBtn = document.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<span class="spinner-small"></span> Sharing...';
@@ -286,7 +288,11 @@ export default class AddStoryView {
     }
   }
 
-  stopCamera() {
+  /**
+   * Metode 'destroy' ini akan dipanggil oleh router sebelum halaman diganti.
+   * Fungsinya adalah untuk membersihkan resource seperti stream kamera.
+   */
+  destroy() {
     stopCamera(this.stream);
   }
 

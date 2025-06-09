@@ -1,92 +1,111 @@
-import HomeView from './views/home.js';
-import LandingView from './views/landing.js';
-import StoriesView from './views/stories.js';
-import AddStoryView from './views/add-story.js';
-import DetailView from './views/detail.js';
-import LoginView from './views/login.js';
-import RegisterView from './views/register.js';
-import SubscribeView from './views/subscribe.js';
-import FavoritesView from './views/favorites.js';
-import AboutView from './views/about.js';
-import NotFoundView from './views/not-found.js';
-import { navigateWithTransition } from './utils/transition.js';
-import { getToken, removeToken } from './utils/auth.js';
+// src/js/router.js
+
+import HomeView from "./views/home.js";
+import LandingView from "./views/landing.js";
+import StoriesView from "./views/stories.js";
+import AddStoryView from "./views/add-story.js";
+import DetailView from "./views/detail.js";
+import LoginView from "./views/login.js";
+import RegisterView from "./views/register.js";
+import SubscribeView from "./views/subscribe.js";
+import FavoritesView from "./views/favorites.js";
+import AboutView from "./views/about.js";
+import NotFoundView from "./views/not-found.js";
+import { navigateWithTransition } from "./utils/transition.js";
+import { getToken, removeToken } from "./utils/auth.js";
 
 const routes = {
-  '#/': LandingView,
-  '#/home': HomeView,
-  '#/stories': StoriesView,
-  '#/add-story': AddStoryView,
-  '#/detail/:id': DetailView,
-  '#/login': LoginView,
-  '#/register': RegisterView,
-  '#/subscribe': SubscribeView,
-  '#/favorites': FavoritesView,
-  '#/about': AboutView,
-  '#/404': NotFoundView,
+  "#/": LandingView,
+  "#/home": HomeView,
+  "#/stories": StoriesView,
+  "#/add-story": AddStoryView,
+  "#/detail/:id": DetailView,
+  "#/login": LoginView,
+  "#/register": RegisterView,
+  "#/subscribe": SubscribeView,
+  "#/favorites": FavoritesView,
+  "#/about": AboutView,
+  "#/404": NotFoundView,
 };
+
+// =======================================================
+// PERBAIKAN: Variabel untuk menyimpan instance view saat ini
+// =======================================================
+let currentViewInstance = null;
 
 export function initRouter() {
   updateNavLinks();
-  window.addEventListener('hashchange', () => {
+  window.addEventListener("hashchange", () => {
     updateNavLinks();
     renderPage();
   });
-  window.addEventListener('load', () => {
+  window.addEventListener("load", () => {
     updateNavLinks();
     renderPage();
   });
 
-  document.getElementById('logout-link').addEventListener('click', (e) => {
+  document.getElementById("logout-link").addEventListener("click", (e) => {
     e.preventDefault();
     removeToken();
     updateNavLinks();
-    window.location.hash = '#/login';
+    window.location.hash = "#/login";
   });
 }
 
 function updateNavLinks() {
+  // ... (Fungsi ini tidak berubah) ...
   const token = getToken();
-  const loginLink = document.getElementById('login-link');
-  const logoutLink = document.getElementById('logout-link');
-  const subscribeLink = document.getElementById('subscribe-link');
-  const favoritesLink = document.getElementById('favorites-link');
-  const userWelcome = document.getElementById('user-welcome');
-  
+  const loginLink = document.getElementById("login-link");
+  const logoutLink = document.getElementById("logout-link");
+  const subscribeLink = document.getElementById("subscribe-link");
+  const favoritesLink = document.getElementById("favorites-link");
+  const userWelcome = document.getElementById("user-welcome");
+
   if (token) {
-    loginLink.style.display = 'none';
-    logoutLink.style.display = 'inline';
-    if (subscribeLink) subscribeLink.style.display = 'inline';
-    if (favoritesLink) favoritesLink.style.display = 'inline';
-    
-    // Show user welcome message
+    loginLink.style.display = "none";
+    logoutLink.style.display = "inline";
+    if (subscribeLink) subscribeLink.style.display = "inline";
+    if (favoritesLink) favoritesLink.style.display = "inline";
+
     if (userWelcome) {
       const userData = getUserData();
-      userWelcome.textContent = `Hi, ${userData.name || 'User'}`;
-      userWelcome.style.display = 'inline';
+      userWelcome.textContent = `Hi, ${userData.name || "User"}`;
+      userWelcome.style.display = "inline";
     }
   } else {
-    loginLink.style.display = 'inline';
-    logoutLink.style.display = 'none';
-    if (subscribeLink) subscribeLink.style.display = 'none';
-    if (favoritesLink) favoritesLink.style.display = 'none';
-    if (userWelcome) userWelcome.style.display = 'none';
+    loginLink.style.display = "inline";
+    logoutLink.style.display = "none";
+    if (subscribeLink) subscribeLink.style.display = "none";
+    if (favoritesLink) favoritesLink.style.display = "none";
+    if (userWelcome) userWelcome.style.display = "none";
   }
 }
 
 function getUserData() {
+  // ... (Fungsi ini tidak berubah) ...
   try {
-    const userData = localStorage.getItem('userData');
-    return userData ? JSON.parse(userData) : { name: 'User' };
+    const userData = localStorage.getItem("userData");
+    return userData ? JSON.parse(userData) : { name: "User" };
   } catch (error) {
-    return { name: 'User' };
+    return { name: "User" };
   }
 }
 
 function renderPage() {
-  const hash = window.location.hash || '#/';
+  // =======================================================
+  // PERBAIKAN: Panggil metode destroy dari view lama jika ada
+  // =======================================================
+  if (
+    currentViewInstance &&
+    typeof currentViewInstance.destroy === "function"
+  ) {
+    currentViewInstance.destroy();
+  }
+  // =======================================================
+
+  const hash = window.location.hash || "#/";
   const route = Object.keys(routes).find((key) => {
-    const regex = new RegExp(`^${key.replace(':id', '([^/]+)')}$`);
+    const regex = new RegExp(`^${key.replace(":id", "([^/]+)")}$`);
     return regex.test(hash);
   });
 
@@ -94,8 +113,13 @@ function renderPage() {
     const ViewClass = routes[route];
     const view = new ViewClass();
 
-    if (route === '#/detail/:id') {
-      const match = hash.match(new RegExp(`^${route.replace(':id', '([^/]+)')}$`));
+    // Simpan instance view baru ke variabel global
+    currentViewInstance = view;
+
+    if (route === "#/detail/:id") {
+      const match = hash.match(
+        new RegExp(`^${route.replace(":id", "([^/]+)")}$`)
+      );
       const id = match ? match[1] : null;
       navigateWithTransition(() => view.init({ id }));
     } else {
@@ -103,7 +127,8 @@ function renderPage() {
     }
   } else {
     const notFoundView = new NotFoundView();
-    window.location.hash = '#/404';
+    currentViewInstance = notFoundView; // Simpan juga untuk halaman not found
+    window.location.hash = "#/404";
     navigateWithTransition(() => notFoundView.init());
   }
 }
